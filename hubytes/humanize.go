@@ -5,8 +5,8 @@ import (
 	"math"
 )
 
-type BytesIEC int64
-type BytesSI int64
+// type BytesIEC int64
+// type BytesSI int64
 type Byter int64
 
 type ByteUnit int
@@ -17,8 +17,8 @@ type ByteOptions struct {
 }
 
 const (
-	SI ByteUnit = iota
-	IEC
+	IEC ByteUnit = iota
+	SI
 )
 
 var Options = &ByteOptions{}
@@ -45,7 +45,7 @@ func (s Byter) String() string {
 	}
 
 	if Options.ShowByteLetter {
-		b = "b"
+		b = "B"
 	}
 
 	p := ""
