@@ -21,13 +21,9 @@ const (
 	SI
 )
 
-var Options = &ByteOptions{}
-
-func NewOptions() *ByteOptions {
-	return &ByteOptions{
-		Unit:           IEC,
-		ShowByteLetter: false,
-	}
+var Options = &ByteOptions{
+	Unit:           SI,
+	ShowByteLetter: true,
 }
 
 func (s Byter) String() string {
@@ -57,34 +53,3 @@ func (s Byter) String() string {
 	}
 	return fmt.Sprintf("%.1f%s%s", value, p, b)
 }
-
-// func (s BytesIEC) String() string {
-// 	value := float64(s)
-// 	var div float64
-// 	if Options.Unit == SI {
-// 		div = 1000.0
-// 	} else {
-// 		div = 1024.0
-// 	}
-// 	prefix := ""
-// 	for _, prefix = range iecPrefixes {
-// 		if math.Abs(value) < div {
-// 			break
-// 		}
-// 		value /= div
-// 	}
-// 	return fmt.Sprintf("%.1f%s", value, prefix)
-// }
-
-// func (s BytesSI) String() string {
-// 	value := float64(s)
-// 	div := 1024.0
-// 	prefix := ""
-// 	for _, prefix = range siPrefixes {
-// 		if math.Abs(value) < div {
-// 			break
-// 		}
-// 		value /= div
-// 	}
-// 	return fmt.Sprintf("%.1f%s", value, prefix)
-// }
