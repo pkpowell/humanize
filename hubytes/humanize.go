@@ -59,8 +59,8 @@ func (s Byter) String() string {
 		if math.Abs(value) < Options.Unit.Divisor() {
 			break
 		}
-		value /= Options.Unit.Divisor()
+		value = value / Options.Unit.Divisor()
 	}
 
-	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value, 'f', -1, 64), p, Options.ByteLetter())
+	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value, 'f', -1, 32), p, Options.ByteLetter())
 }
