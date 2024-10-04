@@ -28,16 +28,19 @@ func TestHumanize(t *testing.T) {
 
 func BenchmarkHumanizeIEC(b *testing.B) {
 	Options.Unit = IEC
+	Options.Decimals = three
 	for _, v := range byteValues {
-		fmt.Println(Byter(v))
+		// fmt.Println(Byter(v))
 		b.Log(v, Byter(v))
 	}
 }
 
 func BenchmarkHumanizeSI(b *testing.B) {
 	Options.Unit = SI
+	Options.Decimals = one
+	b.Log("Decimals: ", Options.Decimals)
 	for _, v := range byteValues {
-		fmt.Println(Byter(v))
+		// fmt.Println(Byter(v))
 		b.Log(v, Byter(v))
 	}
 }

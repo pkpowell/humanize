@@ -6,15 +6,22 @@ import (
 	"strconv"
 )
 
-// type BytesIEC int64
-// type BytesSI int64
 type Byter int64
 
 type ByteUnit int
 
+const (
+	one   = 10
+	two   = 100
+	three = 1000
+	four  = 10000
+	five  = 100000
+)
+
 type ByteOptions struct {
 	Unit           ByteUnit
 	ShowByteLetter bool
+	Decimals       float64
 }
 
 const (
@@ -25,6 +32,7 @@ const (
 var Options = &ByteOptions{
 	Unit:           SI,
 	ShowByteLetter: true,
+	Decimals:       one,
 }
 
 func (o *ByteOptions) ByteLetter() string {
@@ -53,14 +61,14 @@ func (b *ByteUnit) Divisor() (div float64) {
 }
 
 func (s Byter) String() string {
-	value := float64(s) * 10
-	var p string
-	for _, p = range Options.Unit.Prefix() {
-		if math.Abs(value) < Options.Unit.Divisor() {
+	value := float64(s)
+	var prefix string
+	for _, prefix = range Options.Unit.Prefix() {
+		if value < Options.Unit.Divisor() {
 			break
 		}
-		value = math.Round(value / Options.Unit.Divisor())
+		value = value / Options.Unit.Divisor()
 	}
-
-	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value/10, 'f', -1, 32), p, Options.ByteLetter())
+	flt := math.Round(value*Options.Decimals) / Options.Decimals
+	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(flt, 'f', -1, 32), prefix, Options.ByteLetter())
 }
