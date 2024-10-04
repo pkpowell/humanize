@@ -3,6 +3,7 @@ package hubytes
 import (
 	"fmt"
 	"math"
+	"strconv"
 )
 
 // type BytesIEC int64
@@ -34,8 +35,8 @@ func (o *ByteOptions) ByteLetter() string {
 }
 
 var Prefix = map[ByteUnit][]string{
-	IEC: []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"},
-	SI:  []string{"", "K", "M", "G", "T", "P", "E"},
+	IEC: {"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"},
+	SI:  {"", "K", "M", "G", "T", "P", "E"},
 }
 
 var Divisor = map[ByteUnit]float64{
@@ -60,5 +61,6 @@ func (s Byter) String() string {
 		}
 		value /= Options.Unit.Divisor()
 	}
-	return fmt.Sprintf("%.1f%s%s", value, p, Options.ByteLetter())
+
+	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value, 'f', -1, 64), p, Options.ByteLetter())
 }
