@@ -7,7 +7,10 @@ import (
 
 var byteValues = []int64{
 	23,
+	1024,
 	1321,
+	2048,
+	6000,
 	21325,
 	243202,
 	1839405,
@@ -24,6 +27,15 @@ func TestHumanize(t *testing.T) {
 }
 
 func BenchmarkHumanizeIEC(b *testing.B) {
+	Options.Unit = IEC
+	for _, v := range byteValues {
+		fmt.Println(Byter(v))
+		b.Log(v, Byter(v))
+	}
+}
+
+func BenchmarkHumanizeSI(b *testing.B) {
+	Options.Unit = SI
 	for _, v := range byteValues {
 		fmt.Println(Byter(v))
 		b.Log(v, Byter(v))

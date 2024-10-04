@@ -53,14 +53,14 @@ func (b *ByteUnit) Divisor() (div float64) {
 }
 
 func (s Byter) String() string {
-	value := float64(s)
+	value := float64(s) * 10
 	var p string
 	for _, p = range Options.Unit.Prefix() {
 		if math.Abs(value) < Options.Unit.Divisor() {
 			break
 		}
-		value = value / Options.Unit.Divisor()
+		value = math.Round(value / Options.Unit.Divisor())
 	}
 
-	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value, 'f', -1, 32), p, Options.ByteLetter())
+	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(value/10, 'f', -1, 32), p, Options.ByteLetter())
 }
