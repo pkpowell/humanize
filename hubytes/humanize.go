@@ -10,6 +10,11 @@ type Byter int64
 
 type ByteUnit int
 
+type Number struct {
+	Integer  int64
+	Fraction int64
+}
+
 const (
 	one   = 10
 	two   = 100
@@ -21,7 +26,7 @@ const (
 type ByteOptions struct {
 	Unit           ByteUnit
 	ShowByteLetter bool
-	MaxDecimals    float64
+	MaxDecimals    int64
 }
 
 const (
@@ -47,8 +52,8 @@ var Prefix = map[ByteUnit][]string{
 	SI:  {"", "K", "M", "G", "T", "P", "E"},
 }
 
-var Divisor = map[ByteUnit]float64{
-	IEC: 1000.0,
+var Divisor = map[ByteUnit]int64{
+	IEC: 1000 * Options.MaxDecimals,
 	SI:  1024.0,
 }
 
@@ -56,11 +61,15 @@ func (b *ByteUnit) Prefix() (prefix []string) {
 	return Prefix[*b]
 }
 
-func (b *ByteUnit) Divisor() (div float64) {
+func (b *ByteUnit) Divisor() int64 {
 	return Divisor[*b]
 }
 
 func (s Byter) String() string {
+	n := &Number{
+		Integer:  int64(s) / Options.Unit.Divisor(),
+		Fraction: int64(s) % Options.Unit.Divisor(),
+	}
 	value := float64(s)
 	var prefix string
 	for _, prefix = range Options.Unit.Prefix() {
