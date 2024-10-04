@@ -26,30 +26,39 @@ var Options = &ByteOptions{
 	ShowByteLetter: true,
 }
 
+func (o *ByteOptions) ByteLetter() string {
+	if Options.ShowByteLetter {
+		return "b"
+	}
+	return ""
+}
+
+var Prefix = map[ByteUnit][]string{
+	IEC: []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"},
+	SI:  []string{"", "K", "M", "G", "T", "P", "E"},
+}
+
+var Divisor = map[ByteUnit]float64{
+	IEC: 1000.0,
+	SI:  1024.0,
+}
+
+func (b *ByteUnit) Prefix() (prefix []string) {
+	return Prefix[*b]
+}
+
+func (b *ByteUnit) Divisor() (div float64) {
+	return Divisor[*b]
+}
+
 func (s Byter) String() string {
 	value := float64(s)
-	var div float64
-	var prefix []string
-	b := ""
-
-	if Options.Unit == SI {
-		prefix = []string{"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"}
-		div = 1000.0
-	} else {
-		prefix = []string{"", "K", "M", "G", "T", "P", "E"}
-		div = 1024.0
-	}
-
-	if Options.ShowByteLetter {
-		b = "B"
-	}
-
-	p := ""
-	for _, p = range prefix {
-		if math.Abs(value) < div {
+	var p string
+	for _, p = range Options.Unit.Prefix() {
+		if math.Abs(value) < Options.Unit.Divisor() {
 			break
 		}
-		value /= div
+		value /= Options.Unit.Divisor()
 	}
-	return fmt.Sprintf("%.1f%s%s", value, p, b)
+	return fmt.Sprintf("%.1f%s%s", value, p, Options.ByteLetter())
 }
