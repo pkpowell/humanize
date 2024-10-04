@@ -21,7 +21,7 @@ const (
 type ByteOptions struct {
 	Unit           ByteUnit
 	ShowByteLetter bool
-	Decimals       float64
+	MaxDecimals    float64
 }
 
 const (
@@ -32,7 +32,7 @@ const (
 var Options = &ByteOptions{
 	Unit:           SI,
 	ShowByteLetter: true,
-	Decimals:       one,
+	MaxDecimals:    one,
 }
 
 func (o *ByteOptions) ByteLetter() string {
@@ -69,6 +69,6 @@ func (s Byter) String() string {
 		}
 		value = value / Options.Unit.Divisor()
 	}
-	flt := math.Round(value*Options.Decimals) / Options.Decimals
+	flt := math.Round(value*Options.MaxDecimals) / Options.MaxDecimals
 	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(flt, 'f', -1, 32), prefix, Options.ByteLetter())
 }
