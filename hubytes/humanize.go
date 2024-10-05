@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+
+	"github.com/govalues/decimal"
 )
 
 // type BytesIEC int64
@@ -53,7 +55,8 @@ func (b *ByteUnit) Divisor() (div float64) {
 }
 
 func (s Byter) String() string {
-	value := float64(s) * 10
+	value, _ := decimal.NewFromInt64(s, 0, 0)
+	// value := float64(s) * 10
 	var p string
 	for _, p = range Options.Unit.Prefix() {
 		if math.Abs(value) < Options.Unit.Divisor() {
