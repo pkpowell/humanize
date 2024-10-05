@@ -52,11 +52,11 @@ var Divisor = map[ByteUnit]float64{
 	SI:  1024.0,
 }
 
-func (b *ByteUnit) Prefix() (prefix []string) {
+func (b *ByteUnit) Prefix() []string {
 	return Prefix[*b]
 }
 
-func (b *ByteUnit) Divisor() (div float64) {
+func (b *ByteUnit) Divisor() float64 {
 	return Divisor[*b]
 }
 
@@ -67,7 +67,7 @@ func (s Byter) String() string {
 		if value < Options.Unit.Divisor() {
 			break
 		}
-		value = value / Options.Unit.Divisor()
+		value /= Options.Unit.Divisor()
 	}
 	flt := math.Round(value*Options.MaxDecimals) / Options.MaxDecimals
 	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(flt, 'f', -1, 32), prefix, Options.ByteLetter())
