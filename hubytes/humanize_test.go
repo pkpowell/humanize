@@ -6,10 +6,15 @@ import (
 
 var byteValues = []int64{
 	23,
+	1000,
+	1001,
 	1024,
 	1321,
+	2000,
+	2001,
 	2048,
 	6000,
+	6001,
 	21325,
 	243202,
 	1839405,
@@ -38,7 +43,7 @@ func BenchmarkHumanizeIEC(b *testing.B) {
 
 func BenchmarkHumanizeSI(b *testing.B) {
 	Options.Unit = SI
-	Options.MaxDecimals = One
+	Options.MaxDecimals = Two
 	// b.Log("Decimals: ", Options.MaxDecimals)
 	for range b.N {
 		for _, v := range byteValues {
