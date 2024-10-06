@@ -2,8 +2,9 @@ package hubytes
 
 import (
 	"fmt"
-	"math"
 	"strconv"
+
+	"github.com/govalues/decimal"
 )
 
 type Byter int64
@@ -20,6 +21,7 @@ const (
 
 type ByteOptions struct {
 	Unit           ByteUnit
+	MaxDecimal     int
 	ShowByteLetter bool
 	MaxDecimals    float64
 }
@@ -47,28 +49,41 @@ var Prefix = map[ByteUnit][]string{
 	SI:  {"", "K", "M", "G", "T", "P", "E"},
 }
 
-var Divisor = map[ByteUnit]float64{
-	IEC: 1000.0,
-	SI:  1024.0,
+var iec, _ = decimal.NewFromInt64(1000, 0, 0)
+var si, _ = decimal.NewFromInt64(1024, 0, 0)
+
+var Divisor = map[ByteUnit]decimal.Decimal{
+	IEC: iec,
+	SI:  si,
 }
 
 func (b *ByteUnit) Prefix() []string {
 	return Prefix[*b]
 }
 
-func (b *ByteUnit) Divisor() float64 {
+func (b *ByteUnit) Divisor() decimal.Decimal {
 	return Divisor[*b]
 }
 
 func (s Byter) String() string {
-	value := float64(s)
-	var prefix string
-	for _, prefix = range Options.Unit.Prefix() {
-		if value < Options.Unit.Divisor() {
+	value, err := decimal.NewFromInt64(int64(s), 0, 0)
+	if err != nil {
+		fmt.Printf("decimal.NewFromInt64 error %s", err)
+		return ""
+	}
+
+	var p string
+	for _, p = range Options.Unit.Prefix() {
+		if value.Less(Options.Unit.Divisor()) {
 			break
 		}
-		value /= Options.Unit.Divisor()
+		value, err = value.Quo(Options.Unit.Divisor())
+		if err != nil {
+			fmt.Printf("decimal.NewFromInt64 error %s", err)
+			return ""
+		}
 	}
-	flt := math.Round(value*Options.MaxDecimals) / Options.MaxDecimals
-	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(flt, 'f', -1, 32), prefix, Options.ByteLetter())
+	f, _ := value.Ceil(Options.MaxDecimal).Float64()
+	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(f, 'f', -1, 32), p, Options.ByteLetter())
+	// return fmt.Sprintf("%.1f%s%s", value, p, Options.ByteLetter())
 }

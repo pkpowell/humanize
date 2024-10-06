@@ -30,7 +30,6 @@ func BenchmarkHumanizeIEC(b *testing.B) {
 	Options.Unit = IEC
 	Options.MaxDecimals = three
 	for _, v := range byteValues {
-		// fmt.Println(Byter(v))
 		b.Log(v, Byter(v))
 	}
 }
@@ -41,7 +40,6 @@ func BenchmarkHumanizeSI(b *testing.B) {
 	b.Log("Decimals: ", Options.MaxDecimals)
 	for range b.N {
 		for _, v := range byteValues {
-			// fmt.Println(Byter(v))
 			b.Log(v, Byter(v))
 		}
 	}
