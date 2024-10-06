@@ -77,22 +77,22 @@ func (b *ByteUnit) Divisor() decimal.Decimal {
 }
 
 func (s Byter) String() string {
-	value, err := decimal.New(int64(s), 0)
-	if err != nil {
-		fmt.Printf("decimal.New error %s", err)
-		return ""
-	}
+	value, _ := decimal.New(int64(s), 0)
+	// if err != nil {
+	// 	fmt.Printf("decimal.New error %s", err)
+	// 	return ""
+	// }
 
 	var p string
 	for _, p = range Options.Unit.Prefix() {
 		if value.Less(Options.Unit.Divisor()) {
 			break
 		}
-		value, err = value.Quo(Options.Unit.Divisor())
-		if err != nil {
-			fmt.Printf("decimal.Quo error %s", err)
-			return ""
-		}
+		value, _ = value.Quo(Options.Unit.Divisor())
+		// if err != nil {
+		// 	fmt.Printf("decimal.Quo error %s", err)
+		// 	return ""
+		// }
 	}
 	return fmt.Sprintf("%s%s%s", value.Trunc(int(Options.MaxDecimals)).String(), p, Options.ByteLetter())
 }
