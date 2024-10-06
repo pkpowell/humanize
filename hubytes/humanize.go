@@ -27,10 +27,10 @@ type ByteOptions struct {
 }
 
 const (
-	// Binary - 1024 bytes in a kilobyte
+	// Binary - 1024 bytes in a kilobyte, i.e. 1KiB
 	IEC ByteUnit = iota
 
-	// Decimal - 1000 bytes in a kilobyte
+	// Decimal - 1000 bytes in a kilobyte, i.e. 1KB
 	SI
 )
 
