@@ -28,17 +28,21 @@ var byteValues = []int64{
 func BenchmarkHumanizeIEC(b *testing.B) {
 	Options.Unit = IEC
 	Options.MaxDecimals = Three
-	for _, v := range byteValues {
-		b.Log(v, Byter(v))
+	for range b.N {
+		for _, v := range byteValues {
+			b.Log(v, Byter(v))
+			// _ = Byter(v)
+		}
 	}
 }
 
 func BenchmarkHumanizeSI(b *testing.B) {
 	Options.Unit = SI
 	Options.MaxDecimals = One
-	b.Log("Decimals: ", Options.MaxDecimals)
+	// b.Log("Decimals: ", Options.MaxDecimals)
 	for range b.N {
 		for _, v := range byteValues {
+			// _ = Byter(v)
 			b.Log(v, Byter(v))
 		}
 	}

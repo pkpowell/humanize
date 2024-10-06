@@ -21,21 +21,24 @@ const (
 )
 
 type ByteOptions struct {
-	Unit           ByteUnit
-	MaxDecimals    DecimalCount
-	ShowByteLetter bool
+	Unit           ByteUnit     // IEC or SI
+	MaxDecimals    DecimalCount // decimal places without trailing zeros
+	ShowByteLetter bool         // Show trailing 'b' (bytes)
 }
 
 const (
+	// Binary - 1024 bytes in a kilobyte
 	IEC ByteUnit = iota
+
+	// Decimal - 1000 bytes in a kilobyte
 	SI
 )
 
 // Default options
 var Options = &ByteOptions{
-	Unit:           SI,
-	ShowByteLetter: true,
-	MaxDecimals:    One,
+	Unit:           IEC,  // Binary
+	MaxDecimals:    One,  // 1 decimal place
+	ShowByteLetter: true, // Show trailing 'b'
 }
 
 func (o *ByteOptions) ByteLetter() string {
@@ -46,16 +49,24 @@ func (o *ByteOptions) ByteLetter() string {
 }
 
 var Prefix = map[ByteUnit][]string{
+	// Binary - 1024 bytes in a kilobyte
 	IEC: {"", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"},
-	SI:  {"", "K", "M", "G", "T", "P", "E"},
+
+	// Decimal - 1000 bytes in a kilobyte
+	SI: {"", "K", "M", "G", "T", "P", "E"},
 }
 
-var iec, _ = decimal.NewFromInt64(1000, 0, 0)
-var si, _ = decimal.NewFromInt64(1024, 0, 0)
+// Binary
+var iec, _ = decimal.NewFromInt64(1024, 0, 0)
+
+// Decimal
+var si, _ = decimal.NewFromInt64(1000, 0, 0)
 
 var Divisor = map[ByteUnit]decimal.Decimal{
+	// Binary
 	IEC: iec,
-	SI:  si,
+	// Decimal
+	SI: si,
 }
 
 func (b *ByteUnit) Prefix() []string {
