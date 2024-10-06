@@ -1,7 +1,6 @@
 package hubytes
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -19,16 +18,16 @@ var byteValues = []int64{
 	1024 * 1024 * 1024,
 }
 
-func TestHumanize(t *testing.T) {
-	for _, v := range byteValues {
-		fmt.Println(Byter(v))
-		t.Log(v, Byter(v))
-	}
-}
+// func TestHumanize(t *testing.T) {
+// 	for _, v := range byteValues {
+// 		fmt.Println(Byter(v))
+// 		t.Log(v, Byter(v))
+// 	}
+// }
 
 func BenchmarkHumanizeIEC(b *testing.B) {
 	Options.Unit = IEC
-	Options.MaxDecimals = three
+	Options.MaxDecimals = Three
 	for _, v := range byteValues {
 		b.Log(v, Byter(v))
 	}
@@ -36,7 +35,7 @@ func BenchmarkHumanizeIEC(b *testing.B) {
 
 func BenchmarkHumanizeSI(b *testing.B) {
 	Options.Unit = SI
-	Options.MaxDecimals = one
+	Options.MaxDecimals = One
 	b.Log("Decimals: ", Options.MaxDecimals)
 	for range b.N {
 		for _, v := range byteValues {

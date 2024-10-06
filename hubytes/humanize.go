@@ -10,20 +10,20 @@ import (
 type Byter int64
 
 type ByteUnit int
+type DecimalCount int
 
 const (
-	one   = 10
-	two   = 100
-	three = 1000
-	four  = 10000
-	five  = 100000
+	One   DecimalCount = 1
+	Two   DecimalCount = 2
+	Three DecimalCount = 3
+	Four  DecimalCount = 4
+	Five  DecimalCount = 5
 )
 
 type ByteOptions struct {
 	Unit           ByteUnit
-	MaxDecimal     int
+	MaxDecimals    DecimalCount
 	ShowByteLetter bool
-	MaxDecimals    float64
 }
 
 const (
@@ -31,10 +31,11 @@ const (
 	SI
 )
 
+// Default options
 var Options = &ByteOptions{
 	Unit:           SI,
 	ShowByteLetter: true,
-	MaxDecimals:    one,
+	MaxDecimals:    One,
 }
 
 func (o *ByteOptions) ByteLetter() string {
@@ -83,7 +84,7 @@ func (s Byter) String() string {
 			return ""
 		}
 	}
-	f, _ := value.Ceil(Options.MaxDecimal).Float64()
+	f, _ := value.Ceil(int(Options.MaxDecimals)).Float64()
 	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(f, 'f', -1, 32), p, Options.ByteLetter())
 	// return fmt.Sprintf("%.1f%s%s", value, p, Options.ByteLetter())
 }
