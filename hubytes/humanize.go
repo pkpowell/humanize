@@ -94,5 +94,5 @@ func (s Byter) String() string {
 		// 	return ""
 		// }
 	}
-	return fmt.Sprintf("%s%s%s", value.Trunc(int(Options.MaxDecimals)).String(), p, Options.ByteLetter())
+	return fmt.Sprintf("%s %s%s", value.Trunc(int(Options.MaxDecimals)).String(), p, Options.ByteLetter())
 }
