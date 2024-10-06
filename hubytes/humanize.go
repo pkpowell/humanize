@@ -2,7 +2,6 @@ package hubytes
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/govalues/decimal"
 )
@@ -28,10 +27,10 @@ type ByteOptions struct {
 
 const (
 	// Binary - 1024 bytes in a kilobyte, i.e. 1KiB
-	IEC ByteUnit = iota
+	IEC ByteUnit = 1024
 
 	// Decimal - 1000 bytes in a kilobyte, i.e. 1KB
-	SI
+	SI ByteUnit = 1000
 )
 
 // Default options
@@ -43,7 +42,7 @@ var Options = &ByteOptions{
 
 func (o *ByteOptions) ByteLetter() string {
 	if Options.ShowByteLetter {
-		return "b"
+		return "B"
 	}
 	return ""
 }
@@ -57,10 +56,10 @@ var Prefix = map[ByteUnit][]string{
 }
 
 // Binary
-var iec, _ = decimal.NewFromInt64(1024, 0, 0)
+var iec, _ = decimal.New(int64(IEC), 0)
 
 // Decimal
-var si, _ = decimal.NewFromInt64(1000, 0, 0)
+var si, _ = decimal.New(int64(SI), 0)
 
 var Divisor = map[ByteUnit]decimal.Decimal{
 	// Binary
@@ -78,9 +77,9 @@ func (b *ByteUnit) Divisor() decimal.Decimal {
 }
 
 func (s Byter) String() string {
-	value, err := decimal.NewFromInt64(int64(s), 0, 0)
+	value, err := decimal.New(int64(s), 0)
 	if err != nil {
-		fmt.Printf("decimal.NewFromInt64 error %s", err)
+		fmt.Printf("decimal.New error %s", err)
 		return ""
 	}
 
@@ -91,11 +90,9 @@ func (s Byter) String() string {
 		}
 		value, err = value.Quo(Options.Unit.Divisor())
 		if err != nil {
-			fmt.Printf("decimal.NewFromInt64 error %s", err)
+			fmt.Printf("decimal.Quo error %s", err)
 			return ""
 		}
 	}
-	f, _ := value.Ceil(int(Options.MaxDecimals)).Float64()
-	return fmt.Sprintf("%s%s%s", strconv.FormatFloat(f, 'f', -1, 32), p, Options.ByteLetter())
-	// return fmt.Sprintf("%.1f%s%s", value, p, Options.ByteLetter())
+	return fmt.Sprintf("%s%s%s", value.Trunc(int(Options.MaxDecimals)).String(), p, Options.ByteLetter())
 }
