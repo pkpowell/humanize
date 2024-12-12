@@ -1,8 +1,6 @@
 package hubytes
 
 import (
-	"fmt"
-
 	"github.com/govalues/decimal"
 )
 
@@ -15,6 +13,7 @@ type Unit int
 type DecimalCount int
 
 const (
+	Zero  DecimalCount = 0
 	One   DecimalCount = 1
 	Two   DecimalCount = 2
 	Three DecimalCount = 3
@@ -27,6 +26,7 @@ type ByteOptions struct {
 	MaxDecimals    DecimalCount // decimal places without trailing zeros
 	ShowByteLetter bool         // Show trailing 'b' (bytes)
 	Full           bool         // Show full name
+	Space          bool         // Space between value and unit
 }
 
 type ByteUnit struct {
@@ -40,6 +40,7 @@ const (
 
 	// Decimal - 1000 bytes in a kilobyte, i.e. 1KB
 	SI Unit = 1000
+	// spc string = " "
 )
 
 // Default options
@@ -48,6 +49,27 @@ var Options = &ByteOptions{
 	MaxDecimals:    One,   // 1 decimal place
 	ShowByteLetter: true,  // show trailing 'b'
 	Full:           false, // print Full name
+}
+
+// Binary
+var iec, _ = decimal.New(int64(IEC), 0)
+
+// Decimal
+var si, _ = decimal.New(int64(SI), 0)
+
+// value container
+var value decimal.Decimal
+
+var p ByteUnit
+
+var unitSpace string
+
+var Divisor = map[Unit]decimal.Decimal{
+	// Binary
+	IEC: iec,
+
+	// Decimal
+	SI: si,
 }
 
 func (o *ByteOptions) ByteLetter() string {
@@ -87,23 +109,6 @@ var Prefix = map[Unit][]ByteUnit{
 	},
 }
 
-// Binary
-var iec, _ = decimal.New(int64(IEC), 0)
-
-// Decimal
-var si, _ = decimal.New(int64(SI), 0)
-
-// value container
-var value decimal.Decimal
-var p ByteUnit
-
-var Divisor = map[Unit]decimal.Decimal{
-	// Binary
-	IEC: iec,
-	// Decimal
-	SI: si,
-}
-
 func (b *Unit) Prefix() []ByteUnit {
 	return Prefix[*b]
 }
@@ -113,6 +118,9 @@ func (b *Unit) Divisor() decimal.Decimal {
 }
 
 func (s Byter) String() string {
+	if Options.Space {
+		unitSpace = " "
+	}
 	value, _ = decimal.New(int64(s), 0)
 
 	for _, p = range Options.Unit.Prefix() {
@@ -126,10 +134,11 @@ func (s Byter) String() string {
 
 	if Options.Full {
 		if value.Equal(decimal.One) {
-			return fmt.Sprintf("%s %s", value, p.Name)
+			return value.String() + unitSpace + p.Name
 		}
-		return fmt.Sprintf("%s %s", value, p.Name+"s")
+
+		return value.String() + unitSpace + p.Name + "s"
 	}
 
-	return fmt.Sprintf("%s%s%s", value, p.Letter, Options.ByteLetter())
+	return value.String() + unitSpace + p.Letter + Options.ByteLetter()
 }
