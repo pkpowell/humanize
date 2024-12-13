@@ -61,3 +61,40 @@ func TestHumanize(t *testing.T) {
 		t.Log(v, Byter(v))
 	}
 }
+
+func TestHumanizeInt(t *testing.T) {
+	Options.Unit = IEC
+	Options.Space = false
+	Options.MaxDecimals = One
+	Options.Full = false
+	Options.ShowByteLetter = true
+	for _, v := range byteValues {
+		t.Log(v, ByteInt(v))
+	}
+}
+
+func TestHumanizeStr(t *testing.T) {
+	var b = []byte{}
+	Options.Unit = IEC
+	Options.Space = false
+	Options.MaxDecimals = One
+	Options.Full = false
+	Options.ShowByteLetter = true
+	for v := range 10 {
+		b = make([]byte, v*2048*2048)
+		t.Log(v, ByteString(b))
+	}
+}
+
+func TestHumanizeByte(t *testing.T) {
+	var b = []byte{}
+	Options.Unit = IEC
+	Options.Space = false
+	Options.MaxDecimals = One
+	Options.Full = false
+	Options.ShowByteLetter = true
+	for v := range 10 {
+		b = make([]byte, v*2048*2048)
+		t.Log(v, ByteByte(b))
+	}
+}

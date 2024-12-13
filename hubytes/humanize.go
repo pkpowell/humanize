@@ -5,6 +5,14 @@ import (
 )
 
 type Byter int64
+type ByteInt int64
+type ByteByte []byte
+type ByteString string
+
+// type ByterType interface{ ~string | ~[]byte }
+// type ByteString[T ByterType] struct {
+// 	Data T
+// }
 
 // 1000 or 1024
 type Unit int
@@ -119,6 +127,17 @@ func (b *Unit) divisor() decimal.Decimal {
 }
 
 func (s Byter) String() string {
+	return ByteInt(s).String()
+}
+
+func (s ByteString) String() string {
+	return ByteInt(len(s)).String()
+}
+func (s ByteByte) String() string {
+	return ByteInt(len(s)).String()
+}
+
+func (s ByteInt) String() string {
 	if Options.Space {
 		unitSpace = " "
 	}
