@@ -64,7 +64,7 @@ var p ByteUnit
 
 var unitSpace string
 
-var Divisor = map[Unit]decimal.Decimal{
+var divisor = map[Unit]decimal.Decimal{
 	// Binary
 	IEC: iec,
 
@@ -113,8 +113,8 @@ func (b *Unit) Prefix() []ByteUnit {
 	return Prefix[*b]
 }
 
-func (b *Unit) Divisor() decimal.Decimal {
-	return Divisor[*b]
+func (b *Unit) divisor() decimal.Decimal {
+	return divisor[*b]
 }
 
 func (s Byter) String() string {
@@ -124,10 +124,10 @@ func (s Byter) String() string {
 	value, _ = decimal.New(int64(s), 0)
 
 	for _, p = range Options.Unit.Prefix() {
-		if value.Less(Options.Unit.Divisor()) {
+		if value.Less(Options.Unit.divisor()) {
 			break
 		}
-		value, _ = value.Quo(Options.Unit.Divisor())
+		value, _ = value.Quo(Options.Unit.divisor())
 	}
 
 	value = value.Trunc(int(Options.MaxDecimals)).Trim(0)
