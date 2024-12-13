@@ -1,4 +1,4 @@
-package hubytes
+package units
 
 import (
 	"testing"
@@ -29,7 +29,7 @@ func BenchmarkHumanizeIEC(b *testing.B) {
 	Options.Full = false
 	for range b.N {
 		for _, v := range byteValues {
-			b.Log(v, Byter(v))
+			b.Log(v, Int(v))
 			// _ = Byter(v)
 		}
 	}
@@ -45,7 +45,7 @@ func BenchmarkHumanizeSI(b *testing.B) {
 	// b.Log("Decimals: ", Options.MaxDecimals)
 	for range b.N {
 		for _, v := range byteValues {
-			container = Byter(v).String()
+			container = Int(v).String()
 			// b.Log(v, Byter(v))
 		}
 	}
@@ -58,7 +58,7 @@ func TestHumanize(t *testing.T) {
 	Options.Full = false
 	Options.ShowByteLetter = true
 	for _, v := range byteValues {
-		t.Log(v, Byter(v))
+		t.Log(v, Int(v))
 	}
 }
 
@@ -69,7 +69,7 @@ func TestHumanizeInt(t *testing.T) {
 	Options.Full = false
 	Options.ShowByteLetter = true
 	for _, v := range byteValues {
-		t.Log(v, ByteInt(v))
+		t.Log(v, Int(v))
 	}
 }
 
@@ -82,7 +82,7 @@ func TestHumanizeStr(t *testing.T) {
 	Options.ShowByteLetter = true
 	for v := range 10 {
 		b = make([]byte, v*2048*2048)
-		t.Log(v, ByteString(b))
+		t.Log(v, String(b))
 	}
 }
 
@@ -95,6 +95,6 @@ func TestHumanizeByte(t *testing.T) {
 	Options.ShowByteLetter = true
 	for v := range 10 {
 		b = make([]byte, v*2048*2048)
-		t.Log(v, ByteByte(b))
+		t.Log(v, Byte(b))
 	}
 }

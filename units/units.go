@@ -1,18 +1,13 @@
-package hubytes
+package units
 
 import (
 	"github.com/govalues/decimal"
 )
 
 type Byter int64
-type ByteInt int64
-type ByteByte []byte
-type ByteString string
-
-// type ByterType interface{ ~string | ~[]byte }
-// type ByteString[T ByterType] struct {
-// 	Data T
-// }
+type Int int64
+type Byte []byte
+type String string
 
 // 1000 or 1024
 type Unit int
@@ -127,17 +122,18 @@ func (b *Unit) divisor() decimal.Decimal {
 }
 
 func (s Byter) String() string {
-	return ByteInt(s).String()
+	return Int(s).String()
 }
 
-func (s ByteString) String() string {
-	return ByteInt(len(s)).String()
-}
-func (s ByteByte) String() string {
-	return ByteInt(len(s)).String()
+func (s String) String() string {
+	return Int(len(s)).String()
 }
 
-func (s ByteInt) String() string {
+func (s Byte) String() string {
+	return Int(len(s)).String()
+}
+
+func (s Int) String() string {
 	if Options.Space {
 		unitSpace = " "
 	}
