@@ -29,7 +29,7 @@ type ByteOptions struct {
 	Space          bool         // Space between value and unit
 }
 
-type ByteUnit struct {
+type byteUnit struct {
 	Letter string
 	Name   string
 }
@@ -49,6 +49,7 @@ var Options = &ByteOptions{
 	MaxDecimals:    One,   // 1 decimal place
 	ShowByteLetter: true,  // show trailing 'b'
 	Full:           false, // print Full name
+	Space:          false, // space between value and unit
 }
 
 // Binary
@@ -60,7 +61,7 @@ var si, _ = decimal.New(int64(SI), 0)
 // value container
 var value decimal.Decimal
 
-var p ByteUnit
+var p byteUnit
 
 var unitSpace string
 
@@ -72,14 +73,14 @@ var divisor = map[Unit]decimal.Decimal{
 	SI: si,
 }
 
-func (o *ByteOptions) ByteLetter() string {
+func (o *ByteOptions) byteLetter() string {
 	if Options.ShowByteLetter {
 		return "B"
 	}
 	return ""
 }
 
-var Prefix = map[Unit][]ByteUnit{
+var prefix = map[Unit][]byteUnit{
 	// Binary - 1024 bytes in a kilobyte
 	IEC: {
 		{Letter: "", Name: "byte"},
@@ -109,8 +110,8 @@ var Prefix = map[Unit][]ByteUnit{
 	},
 }
 
-func (b *Unit) Prefix() []ByteUnit {
-	return Prefix[*b]
+func (b *Unit) prefix() []byteUnit {
+	return prefix[*b]
 }
 
 func (b *Unit) divisor() decimal.Decimal {
@@ -123,7 +124,7 @@ func (s Byter) String() string {
 	}
 	value, _ = decimal.New(int64(s), 0)
 
-	for _, p = range Options.Unit.Prefix() {
+	for _, p = range Options.Unit.prefix() {
 		if value.Less(Options.Unit.divisor()) {
 			break
 		}
@@ -140,5 +141,5 @@ func (s Byter) String() string {
 		return value.String() + unitSpace + p.Name + "s"
 	}
 
-	return value.String() + unitSpace + p.Letter + Options.ByteLetter()
+	return value.String() + unitSpace + p.Letter + Options.byteLetter()
 }
