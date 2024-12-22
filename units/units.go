@@ -4,7 +4,6 @@ import (
 	"github.com/govalues/decimal"
 )
 
-type Byter int64
 type Int int64
 type Byte []byte
 type String string
@@ -119,10 +118,6 @@ func (b *Unit) prefix() []byteUnit {
 
 func (b *Unit) divisor() decimal.Decimal {
 	return divisor[*b]
-}
-
-func (s Byter) String() string {
-	return Int(s).String()
 }
 
 func (s String) String() string {
