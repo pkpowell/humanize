@@ -40,7 +40,7 @@ const (
 	// Binary - 1024 bytes in a kilobyte, i.e. 1KiB
 	IEC Unit = 1024
 
-	// Decimal - 1000 bytes in a kilobyte, i.e. 1KB
+	// Decimal - 1000 bytes in a kilobyte, i.e. 1kB
 	SI Unit = 1000
 	// spc string = " "
 )
