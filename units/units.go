@@ -146,7 +146,7 @@ func (s Int) String() string {
 		}
 		value, err = value.Quo(Options.Unit.divisor())
 		if err != nil {
-			fmt.Println("decimal.New error", err)
+			fmt.Println("value.QuoNew error", err)
 			return ""
 		}
 	}
