@@ -1,6 +1,8 @@
 package units
 
 import (
+	"fmt"
+
 	"github.com/govalues/decimal"
 )
 
@@ -61,7 +63,7 @@ var iec, _ = decimal.New(int64(IEC), 0)
 var si, _ = decimal.New(int64(SI), 0)
 
 // value container
-var value decimal.Decimal
+// var value decimal.Decimal
 
 var p byteUnit
 
@@ -132,13 +134,21 @@ func (s Int) String() string {
 	if Options.Space {
 		unitSpace = " "
 	}
-	value, _ = decimal.New(int64(s), 0)
+	value, err := decimal.New(int64(s), 0)
+	if err != nil {
+		fmt.Println("decimal.New error", err)
+		return ""
+	}
 
 	for _, p = range Options.Unit.prefix() {
 		if value.Less(Options.Unit.divisor()) {
 			break
 		}
-		value, _ = value.Quo(Options.Unit.divisor())
+		value, err = value.Quo(Options.Unit.divisor())
+		if err != nil {
+			fmt.Println("decimal.New error", err)
+			return ""
+		}
 	}
 
 	value = value.Trunc(int(Options.MaxDecimals)).Trim(0)
